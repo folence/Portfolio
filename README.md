@@ -17,7 +17,6 @@ A modern portfolio website showcasing technical skills, projects, and profession
 - 📂 Project showcase with live demos
 - 📄 Professional experience timeline
 - 📬 Contact section with multiple channels
-- ⚡ Optimized performance (95+ Lighthouse score)
 
 ## Technologies Used
 
