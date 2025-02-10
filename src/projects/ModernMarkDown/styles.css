@@ -1,0 +1,491 @@
+:root {
+    /* Dark theme colors */
+    --editor-bg: #1e1e1e;
+    --editor-fg: #d4d4d4;
+    --toolbar-bg: #252526;
+    --border-color: #333333;
+    --accent-color: #569cd6;
+    --preview-bg: #252526;
+    --preview-fg: #d4d4d4;
+    
+    /* Spacing */
+    --content-width: 80ch;
+    --content-padding: 2rem;
+
+    /* Prism theme colors */
+    --prism-comment: #6a9955;
+    --prism-keyword: #569cd6;
+    --prism-function: #dcdcaa;
+    --prism-string: #ce9178;
+    --prism-number: #b5cea8;
+    --prism-class: #4ec9b0;
+    --prism-variable: #9cdcfe;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: var(--editor-bg);
+    color: var(--editor-fg);
+}
+
+#editor-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+.toolbar {
+    padding: 1rem;
+    background: var(--toolbar-bg);
+    border-bottom: 1px solid var(--border-color);
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.toolbar button {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--editor-fg);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.toolbar button:hover {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.content-area {
+    flex: 1;
+    display: flex;
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+    transition: all 0.3s ease;
+}
+
+#editor, #preview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: var(--content-padding);
+    box-sizing: border-box;
+    overflow-y: auto;
+    transition: all 0.3s ease;
+}
+
+#editor {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    border: none;
+    resize: none;
+    background: var(--editor-bg) !important;
+    color: var(--editor-fg);
+    tab-size: 4;
+}
+
+#editor:focus {
+    outline: none;
+}
+
+#preview {
+    background: var(--preview-bg);
+    color: var(--preview-fg);
+    line-height: 1.6;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--editor-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+/* Mode-specific styles */
+.mode-edit #preview {
+    display: none;
+}
+
+.mode-read #editor {
+    display: none;
+}
+
+.mode-read .content-area {
+    max-width: min(var(--content-width), 90vw);
+}
+
+/* Enhanced Zen Mode */
+.mode-zen {
+    background: var(--editor-bg);
+}
+
+/* Add fixed toolbar in zen mode */
+.mode-zen .toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: var(--toolbar-bg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Adjust content area to account for fixed toolbar */
+.mode-zen .content-area {
+    max-width: 100%;
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    margin-top: 60px; /* Height of toolbar + some padding */
+}
+
+.mode-zen #editor-wrapper,
+.mode-zen #preview {
+    position: relative;
+    width: 50%;
+    height: 100%;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.mode-zen #editor {
+    font-size: 1.2rem;
+    line-height: 1.8;
+}
+
+.mode-zen .markdown-body {
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+/* Preview markdown styling */
+.markdown-body {
+    max-width: 100%;
+    margin: 0 auto;
+    padding-bottom: 40vh;
+    min-height: calc(100% - max(40vh, calc(2 * var(--content-padding))));
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4 {
+    color: var(--accent-color);
+}
+
+.markdown-body code {
+    background: rgba(86, 156, 214, 0.1);
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+}
+
+.markdown-body pre code {
+    background: var(--toolbar-bg);
+    display: block;
+    padding: 1em;
+    overflow-x: auto;
+    color: var(--editor-fg);
+}
+
+.markdown-body blockquote {
+    border-left: 4px solid var(--accent-color);
+    margin: 0;
+    padding-left: 1em;
+    color: #888;
+}
+
+/* Mode-specific content area scaling */
+.mode-edit .content-area {
+    max-width: 100%;
+}
+
+/* Mode-specific editor styles */
+.mode-edit #editor {
+    padding: var(--content-padding) max(var(--content-padding), 10vw);
+}
+
+/* Add styles for the mode indicator */
+.mode-toggle-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.mode-indicators {
+    display: flex;
+    gap: 0.3rem;
+}
+
+.mode-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.mode-indicator.active {
+    background: var(--accent-color);
+}
+
+.keyboard-shortcut {
+    font-size: 0.8rem;
+    color: var(--editor-fg);
+    opacity: 0.6;
+    margin-left: 0.5rem;
+}
+
+/* Add styles for syntax highlighting */
+.content-area {
+    position: relative;
+}
+
+.editor-highlight {
+    display: none; /* Remove the overlay completely */
+}
+
+/* Customize Prism theme colors to match our theme */
+.token.comment { color: var(--prism-comment); }
+.token.keyword { color: var(--prism-keyword); }
+.token.function { color: var(--prism-function); }
+.token.string { color: var(--prism-string); }
+.token.number { color: var(--prism-number); }
+.token.class-name { color: var(--prism-class); }
+.token.variable { color: var(--prism-variable); }
+
+/* Add CodeMirror specific styles */
+.CodeMirror {
+    height: 100% !important;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    background: var(--editor-bg) !important;
+    color: var(--editor-fg) !important;
+}
+
+/* Update zen mode editor and preview padding */
+.mode-zen .CodeMirror {
+    height: auto !important;
+    min-height: 100%;
+    padding: max(10vh, var(--content-padding)) 4rem; /* Reduced top padding */
+}
+
+.mode-zen #preview {
+    padding: max(10vh, var(--content-padding)) 4rem; /* Match editor padding */
+    border-left: 1px solid var(--border-color);
+}
+
+/* Style the cursor */
+.CodeMirror-cursor {
+    border-left: 2px solid var(--accent-color) !important;
+}
+
+/* Style the selected text */
+.CodeMirror-selected {
+    background: #264f78 !important;
+}
+
+/* Style the gutters (line numbers) */
+.CodeMirror-gutters {
+    background: var(--editor-bg) !important;
+    border-right: 1px solid var(--border-color) !important;
+}
+
+.CodeMirror-linenumber {
+    color: #6e7681 !important;
+}
+
+/* Update the editor container */
+#editor-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.mode-zen #editor-wrapper {
+    position: relative;
+    width: 50%;
+}
+
+/* Add editor stats styling */
+.editor-stats {
+    margin-left: auto;
+    font-size: 0.9rem;
+    color: var(--editor-fg);
+    opacity: 0.7;
+    display: flex;
+    gap: 1rem;
+}
+
+.save-status {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.save-status.visible {
+    opacity: 1;
+}
+
+/* Export buttons */
+.export-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.export-buttons button {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+}
+
+/* Add styles for document controls */
+.document-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: 1rem;
+}
+
+#document-selector {
+    background: var(--toolbar-bg);
+    color: var(--editor-fg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    min-width: 150px;
+}
+
+.document-controls button {
+    font-size: 1.2rem;
+    padding: 0.2rem 0.5rem;
+    line-height: 1;
+}
+
+.delete-doc {
+    color: #ff6b6b;
+}
+
+/* Add to document controls styles */
+.open-file {
+    font-size: 1.2rem !important;
+    padding: 0.2rem 0.5rem !important;
+    line-height: 1;
+    color: var(--editor-fg) !important;
+}
+
+/* Optional: Add a subtle hover effect */
+.open-file:hover {
+    color: var(--accent-color) !important;
+}
+
+/* Optional: Add hover tooltip */
+[title] {
+    position: relative;
+}
+
+[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.3rem 0.6rem;
+    background: var(--toolbar-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    z-index: 1000;
+}
+
+/* Update drag and drop visual feedback */
+.drag-over {
+    position: relative;
+}
+
+.drag-over::after {
+    content: 'Drop Markdown File';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(30, 30, 30, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--accent-color);
+    z-index: 1000;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Add styles for info button */
+.info-button {
+    font-size: 1rem !important;
+    padding: 0.2rem 0.8rem !important;
+    border-radius: 50% !important;
+    margin-left: 0.5rem;
+}
+
+/* Info modal styles */
+.info-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--toolbar-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 2rem;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.info-modal.visible {
+    display: block;
+    animation: fadeIn 0.2s ease;
+}
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+}
+
+.modal-overlay.visible {
+    display: block;
+}
