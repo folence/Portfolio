@@ -1,12 +1,6 @@
 # Stefan Bekkevold - Portfolio
 
-[![GitHub Pages Deployment](https://github.com/folence/portfolio/actions/workflows/pages.yml/badge.svg)](https://github.com/folence/portfolio/actions)
-
-A modern portfolio website showcasing technical skills, projects, and professional experience. Built with pure web technologies and a focus on performance.
-
-**Live Demo:** [https://folence.github.io/portfolio](https://folence.github.io/portfolio)
-
-![Portfolio Screenshot](components/screenshot.jpg)
+**Live Site:** [folence.github.io/Portfolio](https://folence.github.io/Portfolio)
 
 ## Features
 
@@ -18,19 +12,7 @@ A modern portfolio website showcasing technical skills, projects, and profession
 - 📄 Professional experience timeline
 - 📬 Contact section with multiple channels
 
-## Technologies Used
 
-- **Frontend:**
-  - HTML5
-  - CSS3 (Custom Properties, Grid, Flexbox)
-  - Vanilla JavaScript
-  - CSS Animations
-  - Intersection Observer API
-
-- **Tools:**
-  - GitHub Pages (Hosting)
-  - Prettier (Code formatting)
-  - Lighthouse (Performance auditing)
 
 ## Key Components
 
